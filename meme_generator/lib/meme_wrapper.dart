@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+final screenshotKey = GlobalKey();
+
 class MemeWrapper extends StatelessWidget {
   final List<Widget> children;
   const MemeWrapper({required this.children, super.key});
@@ -14,16 +16,18 @@ class MemeWrapper extends StatelessWidget {
       ),
     );
     return Center(
+      child: RepaintBoundary(
+        key: screenshotKey,
         child: DecoratedBox(
             decoration: decoration,
             child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 50,
+                  horizontal: 20,
                   vertical: 20,
                 ),
                 child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: children))));
+                    mainAxisSize: MainAxisSize.min, children: children))),
+      ),
+    );
   }
 }
