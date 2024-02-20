@@ -1,0 +1,32 @@
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  buildapk:
+    name: build apk
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: write 
+    needs: test
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.3'
+        channel: 'stable'
+    - run: cd meme_generator
+    - run: flutter pub get
+    - run: flutter build apk --release
+    - run: flutter build appbundle
+    - name: create release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "build/app/outputs/flutter-apk/*.apk"
+        bodyFile: "RELEASE.md"
+        token: ${{ secrets.RELEASE_TOKEN }}
+        
